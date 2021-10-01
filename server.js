@@ -48,7 +48,7 @@ app.get('/', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'public/index.html'))
 })
 
-app.post('/upload', upload.single('img'), async (req, res) => {
+app.post('/upload', upload.single('image'), async (req, res) => {
     if (req.file) {
         try {
             let info = await handlers.uploadHandler(req.file, idGen.getNextId(), db)

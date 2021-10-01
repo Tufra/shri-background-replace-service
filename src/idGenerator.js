@@ -20,7 +20,7 @@ module.exports = class idGenerator {
      */
     getNextId() {
         let nextId = this.currentId + 1n
-        this.currentId += 1n
-        return 'id' + nextId.toString()
+        this.currentId = nextId
+        return 'abobus' + nextId.toString() + 'avtobus'
     }
 }
