@@ -76,12 +76,17 @@ app.get('/list', async (req, res) => {
     try {
         const dbList = await handlers.listHandler(db)
         console.log(`dbList: ${dbList}`);
+
+        if (!dbList.length) {
+            throw Error('Пустой список')
+        }
+
         res.status(200)
         res.send(dbList)
     } catch (error) {
         console.log(error);
 
-        res.status(500)
+        res.status(400)
         res.send(error.message)
     }
 })

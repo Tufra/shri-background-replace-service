@@ -24,11 +24,9 @@ module.exports = {
         console.log(objInfo);
         db.put(id, JSON.stringify(objInfo), (err) => {
             if (err) {
-                error = err
+                throw err
             }
         })
-
-        if (error) throw error
         return objInfo
     },
 
@@ -56,7 +54,7 @@ module.exports = {
                             fs.readFile(info.path, async (err, filedata) => {
                                 if (err) {
                                     error = err
-                                    reject()
+                                    reject(err)
                                     
                                 }
                                 info.body = filedata
@@ -77,9 +75,9 @@ module.exports = {
             })
         }
 
-        await prom()
+        await prom().catch((err) => {throw err})
 
-        if (error) throw error
+        //if (error) throw error
 
         return buffer
         
@@ -102,6 +100,7 @@ module.exports = {
             db.get(id, (err, value) => {
                 if (err) {
                     error = err
+                    reject(err)
                 }
     
                 console.log(`get: ${id}`)
@@ -115,9 +114,9 @@ module.exports = {
                 }
             })
         })
-        await prom()
+        await prom().catch((err) => {throw err})
         console.log('here');
-        if (error) throw error
+        //if (error) throw error
 
         let obj = info
         console.log(JSON.stringify(obj));
@@ -228,14 +227,14 @@ module.exports = {
                 console.log(`merge catch: ${err.message}`);
                 error = err
                 console.log(error instanceof Error);
-                globReject(error)
+                (error)
             }
 
         })
 
-        await prom().catch((err) => { error = err })
+        await prom().catch((err) => { throw error })
         console.log('mmm');
-        if (error) throw error
+        
         console.log(`return ${newImageStream}`);
         return newImageStream
     },
