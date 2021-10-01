@@ -36,7 +36,7 @@ module.exports = {
      * 
      * @param {Object} db Объект базы данных
      * 
-     * @returns {Array} Массив с информацией о каждом объекте в бд
+     * @returns {Object[]} Массив с информацией о каждом объекте в бд
      */
     async listHandler(db) {
         let stream = db.createValueStream()
@@ -89,8 +89,8 @@ module.exports = {
      * 
      * @throws Not Found
      * 
-     * @param {*} id ID картинки
-     * @param {*} db Объект бд
+     * @param {String} id ID картинки
+     * @param {Object} db Объект бд
      * @returns Объект с информацией о картинке
      */
     async downloadHandler(id, db) {
@@ -128,8 +128,8 @@ module.exports = {
      * 
      * @throws IO? 
      * 
-     * @param {*} id ID картинки
-     * @param {*} db Объект бд
+     * @param {String} id ID картинки
+     * @param {Object} db Объект бд
      */
     deleteHandler(id, db) {
         let error = false;
@@ -140,6 +140,16 @@ module.exports = {
         if (error) throw error
     },
 
+    
+    /**
+     * 
+     * @param {String} frontId 
+     * @param {String} backId 
+     * @param {String[3]} color 
+     * @param {number} threshold 
+     * @param {Object} db 
+     * @returns 
+     */
     async mergeHandler(frontId, backId, color, threshold, db) {
         let frontPath
         let backPath
@@ -238,6 +248,14 @@ module.exports = {
         console.log(`return ${newImageStream}`);
         return newImageStream
     },
+
+    /**
+     * Функция сравнивает размеры 2 картинок и возвращает True если они равны
+     * 
+     * @param {String} frontPath Путь до первой картинки
+     * @param {String} backPath Путь до второй картинки
+     * @returns {True | False} Одинаковы ли размеры
+     */
 
     compareDimensions(frontPath, backPath) {
         let frontDims = imgsize(frontPath)

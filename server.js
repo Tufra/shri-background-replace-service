@@ -96,6 +96,7 @@ app.get('/image/:id', async (req, res) => {
         const fileInfo = await handlers.downloadHandler(req.params.id, db)
         console.log('obj: ' + JSON.stringify(fileInfo));
         let stream = fs.createReadStream(fileInfo.path)
+        res.setHeader("Content-Type", fileInfo.mimetype)
         stream.pipe(res)
     } catch (error) {
         console.log(error instanceof Error);
@@ -119,6 +120,7 @@ app.get('/merge', async (req, res) => {
 
     try {
         let result = await handlers.mergeHandler(front, back, color.split(','), threshold, db)
+        res.setHeader('Content-Type', 'image/png')
         result.pipe(res)
 
     } catch (error) {
