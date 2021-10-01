@@ -4,6 +4,8 @@ module.exports = class idGenerator {
     /** 
      * Создает экземпляр генератора ID
      * 
+     * @constructor
+     * 
      * @param {*} lastId 
      */
     constructor(lastId = 0) {

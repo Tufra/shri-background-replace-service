@@ -3,6 +3,7 @@ const fs = require('fs')
 const path = require('path')
 const multer = require('multer')
 const level = require('level')
+const bp = require('body-parser')
 const idGenerator = require('./src/idGenerator.js')
 const handlers = require('./src/handlers.js')
 
@@ -39,6 +40,7 @@ const upload = multer({
 // middleware
 
 app.use(express.static(path.resolve(__dirname, 'public')))
+app.use(bp.urlencoded({extended: true}))
 
 // handlers
 
@@ -46,10 +48,10 @@ app.get('/', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'public/index.html'))
 })
 
-app.post('/upload', upload.single('img'), (req, res) => {
+app.post('/upload', upload.single('img'), async (req, res) => {
     if (req.file) {
         try {
-            let info = handlers.uploadHandler(req.file, idGen.getNextId(), db)
+            let info = await handlers.uploadHandler(req.file, idGen.getNextId(), db)
 
             fs.readFile(info.path, (err, data) => {
                 if (err) {
@@ -66,15 +68,13 @@ app.post('/upload', upload.single('img'), (req, res) => {
         }
     } else {
         res.status(401)
-        res.send({
-            err: 'multer error'
-        })
+        res.send('file uploading error')
     }
 })
 
-app.get('/list', (req, res) => {
+app.get('/list', async (req, res) => {
     try {
-        const dbList = handlers.listHandler(db)
+        const dbList = await handlers.listHandler(db)
         console.log(`dbList: ${dbList}`);
         res.status(200)
         res.send(dbList)
@@ -82,26 +82,46 @@ app.get('/list', (req, res) => {
         console.log(error);
 
         res.status(500)
-        res.send({
-            err: 'dbread err'
-        })
+        res.send(error.message)
     }
 })
 
-app.get('/image/:id', (req, res) => {
-    console.log('getimg: ' + req.params.id)
-
-    res.send(req.params.id);
+app.get('/image/:id', async (req, res) => {
+    try {
+        const fileInfo = await handlers.downloadHandler(req.params.id, db)
+        console.log('obj: ' + JSON.stringify(fileInfo));
+        let stream = fs.createReadStream(fileInfo.path)
+        stream.pipe(res)
+    } catch (error) {
+        console.log(error instanceof Error);
+        res.status(404)
+        res.send(error.message)
+    }
 })
 
 app.delete('image/:id', (req, res) => {
-    console.log('del: ' + req.params.id)
-    res.send(req.params.id)
+    try {
+        handlers.deleteHandler(id, db)
+    } catch (error) {
+        res.status(404)
+        res.send(error)
+    }
 })
 
-app.get('/merge', (req, res) => {
-    console.log(req.body);
-    res.send(req.body)
+app.get('/merge', async (req, res) => {
+    let {front, back, color, threshold} = req.query
+    console.log(typeof color);
+
+    try {
+        let result = await handlers.mergeHandler(front, back, color.split(','), threshold, db)
+        result.pipe(res)
+
+    } catch (error) {
+        console.log(`server: ${error}`);
+        res.status(400)
+        res.send(error.message)
+    }
+    
 })
 
 
