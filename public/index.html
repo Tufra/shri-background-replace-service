@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/main.css">
+    <title>Background Replacer</title>
+</head>
+<body>
+    <div>
+        <form action="">
+            <input type="file" id="upload-input">
+            <label for="upload-input">
+                <div class="upload-label-cont">
+                    <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNTEyIDUxMiIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNTEyIDUxMjsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPGc+DQoJPGc+DQoJCTxwYXRoIGQ9Ik00MzcuMzMzLDEyOEgzMzAuNjY3Yy01Ljg4OCwwLTEwLjY2Ny00LjgtMTAuNjY3LTEwLjY2N1YxMC42NjdDMzIwLDQuNzc5LDMxNS4yMjEsMCwzMDkuMzMzLDBIOTYNCgkJCUM3OC4zNTcsMCw2NCwxNC4zNTcsNjQsMzJ2NDQ4YzAsMTcuNjQzLDE0LjM1NywzMiwzMiwzMmgzMjBjMTcuNjQzLDAsMzItMTQuMzU3LDMyLTMyVjEzOC42NjcNCgkJCUM0NDgsMTMyLjc3OSw0NDMuMjIxLDEyOCw0MzcuMzMzLDEyOHogTTQyNi42NjcsNDgwYzAsNS44NjctNC43NzksMTAuNjY3LTEwLjY2NywxMC42NjdIOTZjLTUuODg4LDAtMTAuNjY3LTQuOC0xMC42NjctMTAuNjY3VjMyDQoJCQljMC01Ljg2Nyw0Ljc3OS0xMC42NjcsMTAuNjY3LTEwLjY2N2gyMDIuNjY3djk2YzAsMTcuNjQzLDE0LjM1NywzMiwzMiwzMmg5NlY0ODB6Ii8+DQoJPC9nPg0KPC9nPg0KPGc+DQoJPGc+DQoJCTxwYXRoIGQ9Ik00NDQuODY0LDEzMS4xMzZsLTEyOC0xMjhjLTQuMTYtNC4xNi0xMC45MjMtNC4xNi0xNS4wODMsMGMtNC4xNiw0LjE2LTQuMTYsMTAuOTIzLDAsMTUuMDgzbDEyOCwxMjgNCgkJCWMyLjA5MSwyLjA2OSw0LjgyMSwzLjExNSw3LjU1MiwzLjExNWMyLjczMSwwLDUuNDYxLTEuMDQ1LDcuNTMxLTMuMTE1QzQ0OS4wMjQsMTQyLjA1OSw0NDkuMDI0LDEzNS4yOTYsNDQ0Ljg2NCwxMzEuMTM2eiIvPg0KCTwvZz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjwvc3ZnPg0K" />
+                </div>
+            </label>
+        </form>
+        <div class="result" id="upload-result"></div>
+        
+        <form action="">
+            <label for="get-image-id">ID: </label>
+            <input type="text" id="get-image-id">
+        </form>
+        <div class="result" id="get-result"></div>
+        
+        <form action="">
+            <label for="delete-image-id">ID: </label>
+            <input type="text" id="delete-image-id">
+        </form>
+        <div class="result" id="delete-result"></div>
+
+        <form action="">
+            <label for="get-image-id">Front ID: </label>
+            <input type="text" id="merge-front-id">
+
+            <label for="get-image-id">Back ID: </label>
+            <input type="text" id="merge-back-id">
+            
+            <label for="get-image-id">Прозрачный цвет: </label>
+            <input type="color" id="merge-trans-id">
+            
+            <label for="get-image-id">Точность: </label>
+            <input type="range" value="5" id="merge-tres-id">
+        </form>
+        <div class="result" id="merge-result"></div>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+</html>
