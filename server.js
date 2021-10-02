@@ -73,7 +73,9 @@ app.post('/upload', async (req, res) => {
                     // })
 
                     res.status(200)
-                    res.send(info)
+                    res.send({
+                        id: info
+                    })
                 } catch (error) {
                     console.log(error);
                     res.status(400)
@@ -93,9 +95,9 @@ app.get('/list', async (req, res) => {
         const dbList = await handlers.listHandler(db)
         console.log(`dbList: ${dbList}`);
 
-        if (!dbList.length) {
-            throw Error('Пустой список')
-        }
+        // if (!dbList.length) {
+        //     throw Error('Пустой список')
+        // }
 
         res.status(200)
         res.send(dbList)
@@ -129,7 +131,9 @@ app.delete('/image/:id', async (req, res) => {
             console.log(`removed from fs ${info}`);
         })
         res.status(200)
-        res.send(`deleted ${req.params.id}`)
+        res.send({
+            'status': 200
+        })
     } catch (error) {
         res.status(404)
         res.send(error)
