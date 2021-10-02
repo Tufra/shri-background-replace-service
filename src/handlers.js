@@ -5,13 +5,13 @@ const imgsize = require('image-size')
 
 module.exports = {
     /** 
-     * Функция добаваляет в бд информацию о файле и возвращает объект с ней
+     * Функция добаваляет в бд информацию о файле и возвращает ID картинки
      * 
      * @param {Object} file Файл multer
      * @param {String} id ID файла
      * @param {Object} db Объект базы данных
      * 
-     * @returns {Object} Объект информации о картинке
+     * @returns {String} ID картинки
      */
     uploadHandler(file, id, db) {
         let objInfo = {
@@ -27,7 +27,7 @@ module.exports = {
                 throw err
             }
         })
-        return objInfo
+        return objInfo.id
     },
 
     /** 

@@ -61,16 +61,19 @@ app.post('/upload', async (req, res) => {
                 try {
                     let info = await handlers.uploadHandler(req.file, idGen.getCurrentId(), db)
         
-                    fs.readFile(info.path, (err, data) => {
-                        if (err) {
-                            throw err
-                        } else {
-                            info.body = data
+                    // fs.readFile(info.path, (err, data) => {
+                    //     if (err) {
+                    //         throw err
+                    //     } else {
+                    //         info.body = data
             
-                            res.status(200)
-                            res.send(info)
-                        }
-                    })
+                    //         res.status(200)
+                    //         res.send(info)
+                    //     }
+                    // })
+
+                    res.status(200)
+                    res.send(info)
                 } catch (error) {
                     console.log(error);
                     res.status(400)
