@@ -50,6 +50,7 @@ app.get('/', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'public/index.html'))
 })
 
+
 app.post('/upload', async (req, res) => {
     upload.single('image')(req, res, async (err) => {
         if (err) {
@@ -90,6 +91,7 @@ app.post('/upload', async (req, res) => {
     
 })
 
+
 app.get('/list', async (req, res) => {
     try {
         const dbList = await handlers.listHandler(db)
@@ -109,6 +111,7 @@ app.get('/list', async (req, res) => {
     }
 })
 
+
 app.get('/image/:id', async (req, res) => {
     try {
         const fileInfo = await handlers.downloadHandler(req.params.id, db)
@@ -122,6 +125,7 @@ app.get('/image/:id', async (req, res) => {
         res.send(error.message)
     }
 })
+
 
 app.delete('/image/:id', async (req, res) => {
     try {
@@ -139,6 +143,7 @@ app.delete('/image/:id', async (req, res) => {
         res.send(error)
     }
 })
+
 
 app.get('/merge', async (req, res) => {
     let {front, back, color, threshold} = req.query
@@ -159,6 +164,7 @@ app.get('/merge', async (req, res) => {
 
 
 const PORT = 8080
+
 app.listen(PORT, () => {
     console.log(`listening at http://localhost:${PORT}/`);
 })
