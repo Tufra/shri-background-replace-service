@@ -121,9 +121,15 @@ app.get('/image/:id', async (req, res) => {
     }
 })
 
-app.delete('image/:id', (req, res) => {
+app.delete('/image/:id', async (req, res) => {
     try {
-        handlers.deleteHandler(id, db)
+        let info = await handlers.deleteHandler(req.params.id, db)
+        console.log(`info: ${info}`);
+        await fs.rm(info, () => {
+            console.log(`removed from fs ${info}`);
+        })
+        res.status(200)
+        res.send(`deleted ${req.params.id}`)
     } catch (error) {
         res.status(404)
         res.send(error)

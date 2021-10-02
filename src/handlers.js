@@ -43,34 +43,23 @@ module.exports = {
         let buffer = []
         let error
         let prom = () => {
-            return new Promise((globResolve) => {
+            return new Promise((resolve) => {
                 let readStack = []
                 stream.on('data', (data) => {
                     let info = JSON.parse(data)
                     console.log(`on ${info.id}`);
                     console.log(`start reading ${info.id}`);
-                    readStack.push(
-                        new Promise((resolve, reject) => {
-                            fs.readFile(info.path, async (err, filedata) => {
-                                if (err) {
-                                    error = err
-                                    reject(err)
-                                    
-                                }
-                                info.body = filedata
-                                buffer.push(info)
-                                console.log('+buf: ' + info.id);
-                                console.log(`stop reading ${info.id}`);
-                                resolve()
-                            })
-                        })
-                    )
-                    
+                    let obj = {
+                        id: info.id,
+                        uploadedAt: info.uploadedAt,
+                        size: info.size
+                    }
+                    buffer.push(obj)
                 })
                 stream.on('end', async() => {
-                    await Promise.all(readStack)
+
                     console.log(`list: ${buffer}`);
-                    globResolve()
+                    resolve()
                 })
             })
         }
@@ -80,7 +69,6 @@ module.exports = {
         //if (error) throw error
 
         return buffer
-        
     },
 
 
@@ -95,31 +83,43 @@ module.exports = {
      */
     async downloadHandler(id, db) {
         let info = {}
-        let error
-        let prom = () => new Promise((resolve, reject) => {
-            db.get(id, (err, value) => {
-                if (err) {
-                    error = err
-                    reject(err)
-                }
+        // let prom = () => new Promise((resolve, reject) => {
+        //     db.get(id, (err, value) => {
+        //         if (err) {
+        //             error = err
+        //             reject(err)
+        //         }
     
-                console.log(`get: ${id}`)
+        //         console.log(`get: ${id}`)
                 
-                try {
-                    info = JSON.parse(value)
-                    console.log(`found: ${info}`);
-                    resolve()
-                } catch (error) {
-                    reject(error)
-                }
-            })
+        //         try {
+        //             info = JSON.parse(value)
+        //             console.log(`found: ${info}`);
+        //             resolve()
+        //         } catch (error) {
+        //             reject(error)
+        //         }
+        //     })
+        // })
+        // await prom().catch((err) => {throw err})
+        // console.log('here');
+        // //if (error) throw error
+
+        await db.get(id).then((value) => {
+            try {
+                info = JSON.parse(value)
+                console.log(`found: ${info}`);
+            } catch (error) {
+                console.log(error);
+                throw err
+            }
+        }).catch((err) => {
+            console.log(err);
+            throw err
         })
-        await prom().catch((err) => {throw err})
-        console.log('here');
-        //if (error) throw error
 
         let obj = info
-        console.log(JSON.stringify(obj));
+        console.log(obj);
         return obj
     },
 
@@ -131,13 +131,46 @@ module.exports = {
      * @param {String} id ID картинки
      * @param {Object} db Объект бд
      */
-    deleteHandler(id, db) {
-        let error = false;
-        db.del(id, (err) => {
-            error = err
+    async deleteHandler(id, db) {
+        let info
+        console.log(`deleting ${id}`);
+        let prom = () => new Promise((resolve, reject) => {
+            db.get(id, (err, value) => {
+                if (err) {
+                    error = err
+                    reject(err)
+                }
+    
+                console.log(`get: ${id}`)
+                
+                try {
+                    info = JSON.parse(value)
+                    
+                    resolve()
+                } catch (error) {
+                    reject(error)
+                }
+            })
         })
 
-        if (error) throw error
+        await prom().catch((err) => {throw err})
+        await db.get(id).then(async (value) => {
+            console.log(`deleted ${id}`);
+            try {
+                info = JSON.parse(value)
+                console.log(`found: ${info}`);
+            } catch (error) {
+                console.log(error);
+                throw error
+            }
+
+            await db.del(id).catch((err) => {throw err})
+        }).catch((err) => {
+            console.log(err)
+            throw err
+        })
+        console.log(`path ${info.path}`);
+        return info.path
     },
 
     
