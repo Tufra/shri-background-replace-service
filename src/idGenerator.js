@@ -19,7 +19,7 @@ module.exports = class idGenerator {
      * @returns {String} Последний ID
      */
     getCurrentId() {
-        return 'abobus' + this.currentId.toString() + 'avtobus'
+        return 'id' + this.currentId.toString()
     }
 
 
@@ -31,6 +31,6 @@ module.exports = class idGenerator {
     getNextId() {
         let nextId = this.currentId + 1n
         this.currentId = nextId
-        return 'abobus' + nextId.toString() + 'avtobus'
+        return 'id' + nextId.toString()
     }
 }

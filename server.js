@@ -6,7 +6,7 @@ const level = require('level')
 const bp = require('body-parser')
 const idGenerator = require('./src/idGenerator.js')
 const handlers = require('./src/handlers.js')
-const { MulterError } = require('multer')
+
 
 const app = express()
 const idGen = new idGenerator()
