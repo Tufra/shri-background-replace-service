@@ -13,6 +13,16 @@ module.exports = class idGenerator {
     }
 
 
+    /**
+     * Функция возвращает последний ID
+     * 
+     * @returns {String} Последний ID
+     */
+    getCurrentId() {
+        return 'abobus' + this.currentId.toString() + 'avtobus'
+    }
+
+
     /** 
      * Функция формирует следующий ID для файла
      * 

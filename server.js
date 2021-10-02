@@ -6,6 +6,7 @@ const level = require('level')
 const bp = require('body-parser')
 const idGenerator = require('./src/idGenerator.js')
 const handlers = require('./src/handlers.js')
+const { MulterError } = require('multer')
 
 const app = express()
 const idGen = new idGenerator()
@@ -17,8 +18,9 @@ const db = level('src/db/db', (err, db) => {
 })
 
 const storage = multer.diskStorage({
-    destination: 'src/db/img/',
+    destination: './src/db/img/',
     filename: (req, file, cb) => {
+        console.log('saved: ', req.file);
         cb(null, idGen.getNextId() + path.extname(file.originalname))
     }
 })
@@ -28,7 +30,7 @@ const fileFilter = (req, file, cb) => {
         file.mimetype === 'image/jpeg') {
             cb(null, true)
         } else {
-            cb(null, false)
+            cb(new Error('not an image'))
         }
 }
 
@@ -48,28 +50,39 @@ app.get('/', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'public/index.html'))
 })
 
-app.post('/upload', upload.single('image'), async (req, res) => {
-    if (req.file) {
-        try {
-            let info = await handlers.uploadHandler(req.file, idGen.getNextId(), db)
-
-            fs.readFile(info.path, (err, data) => {
-                if (err) {
-                    throw err
-                } else {
-                    info.body = data
-    
-                    res.status(200)
-                    res.send(info)
+app.post('/upload', async (req, res) => {
+    upload.single('image')(req, res, async (err) => {
+        if (err) {
+            res.status(400)
+            res.send(err.message)
+        } else {
+            if (req.file) {
+                console.log(req.file);
+                try {
+                    let info = await handlers.uploadHandler(req.file, idGen.getCurrentId(), db)
+        
+                    fs.readFile(info.path, (err, data) => {
+                        if (err) {
+                            throw err
+                        } else {
+                            info.body = data
+            
+                            res.status(200)
+                            res.send(info)
+                        }
+                    })
+                } catch (error) {
+                    console.log(error);
+                    res.status(400)
+                    res.send(error.message)
                 }
-            })
-        } catch (error) {
-            console.log(error);
+            } else {
+                res.status(400)
+                res.send('file uploading error')
+            }
         }
-    } else {
-        res.status(401)
-        res.send('file uploading error')
-    }
+    })
+    
 })
 
 app.get('/list', async (req, res) => {
