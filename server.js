@@ -43,6 +43,7 @@ const upload = multer({
 
 app.use(express.static(path.resolve(__dirname, 'public')))
 app.use(bp.urlencoded({extended: true}))
+app.disable('x-powered-by')
 
 // handlers
 

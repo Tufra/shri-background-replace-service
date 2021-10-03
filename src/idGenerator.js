@@ -1,15 +1,20 @@
+const fs = require('fs')
+const path = require('path')
+
 module.exports = class idGenerator {
     
     
     /** 
      * Создает экземпляр генератора ID
      * 
-     * @constructor
-     * 
-     * @param {*} lastId 
+     * @constructor 
      */
-    constructor(lastId = 0) {
-        this.currentId = BigInt(lastId)
+    constructor() {
+        fs.readFile(path.resolve(__dirname, 'idGen.config.json')).then(data => {
+            this.currentId = BigInt(data.lastId)
+        }).catch((err) => {
+            this.currentId = 0
+        })
     }
 
 
@@ -31,6 +36,7 @@ module.exports = class idGenerator {
     getNextId() {
         let nextId = this.currentId + 1n
         this.currentId = nextId
+        fs.writeFile(path.resolve(__dirname, 'idGen.config.js'), {})
         return 'id' + nextId.toString()
     }
 }
